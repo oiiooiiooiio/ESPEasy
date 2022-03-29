@@ -9,12 +9,16 @@
 #include <Regexp.h>
 
 
-# define P087_REGEX_POS          0
-# define P087_NR_CHAR_USE_POS    1
-# define P087_FILTER_OFF_WINDOW_POS 2
-# define P087_MATCH_TYPE_POS 3
+# define P087_HEX_DATA_LEN_POS   0
+# define P087_HEX_HEADER_POS     1
+# define P087_HEX_DATA_LEN_ADD_POS  2
 
-# define P087_FIRST_FILTER_POS   6
+# define P087_REGEX_POS          3
+# define P087_NR_CHAR_USE_POS    4
+# define P087_FILTER_OFF_WINDOW_POS 5
+# define P087_MATCH_TYPE_POS 6
+
+# define P087_FIRST_FILTER_POS   9
 
 # define P087_NR_FILTERS         10
 # define P87_Nlines              (P087_FIRST_FILTER_POS + 3 * (P087_NR_FILTERS))
@@ -59,11 +63,15 @@ public:
 
   void sendString(const String& data);
 
+  void sendStringhex(const String& data);
+
   bool loop();
 
   // Get the received sentence
   // @retval true when the string is not empty.
   bool getSentence(String& string);
+
+  void getSentencePart(String& string) const;
 
   void getSentencesReceived(uint32_t& succes,
                             uint32_t& error,
@@ -73,6 +81,14 @@ public:
 
   void            setLine(uint8_t          varNr,
                           const String& line);
+
+  int16_t         getTXGpioSerial() const;
+
+  int16_t         getHEXDataLength() const;
+
+  uint16_t        getHEXDataAddLength() const;
+
+  String          getHEXHeader() const;
 
   String          getRegEx() const;
 
@@ -113,7 +129,10 @@ private:
 
   ESPeasySerial *easySerial = nullptr;
   String         sentence_part;
+  uint16_t       sentence_part_length;
   String         last_sentence;
+  char           head_sentence[33];
+  uint16_t       head_sentence_length;
   uint16_t       max_length               = 550;
   uint32_t       sentences_received       = 0;
   uint32_t       sentences_received_error = 0;
@@ -125,6 +144,14 @@ private:
   bool capture_index_used[P87_MAX_CAPTURE_INDEX] = { 0 };
   bool capture_index_must_not_match[P87_MAX_CAPTURE_INDEX] = { 0 };
   bool regex_empty = false;
+  bool hex_head_empty = false;
+  int16_t  tx_gpio_serial = -1;
+  int16_t  hex_data_length = 0;
+  uint16_t hex_data_add_length = 0;
+  uint16_t hex_data_read_length = 0;
+  uint16_t hex_head_match = 0;
+  bool hex_head_match_a = false;
+  bool hex_head_match_b = false;
 };
 
 
