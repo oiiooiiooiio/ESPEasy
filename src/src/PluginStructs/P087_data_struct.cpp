@@ -143,7 +143,7 @@ void P087_data_struct::sendStringhex(const String& data) {
   if (isInitialized()) {
     if (data.length() > 0) {
       setDisableFilterWindowTimer();
-	  unsigned int len = data.length();
+      unsigned int len = data.length();
       for(unsigned int i=0; i < len / 2; i++){
         uint8_t uc = data[i * 2], dc = data[i * 2 + 1];
         if(uc >= 48 && uc <= 57) {
@@ -152,6 +152,8 @@ void P087_data_struct::sendStringhex(const String& data) {
           uc -= 55;
         } else if(uc >= 97 && uc <= 102) {
           uc -= 87;
+        } else {
+          continue;
         }
 
         if(dc >= 48 && dc <= 57) {
@@ -160,6 +162,8 @@ void P087_data_struct::sendStringhex(const String& data) {
           dc -= 55;
         } else if(dc >= 97 && dc <= 102) {
           dc -= 87;
+        } else {
+          continue;
         }
         easySerial->write(uc << 4 | dc);
       }
@@ -392,7 +396,7 @@ String P087_data_struct::getFilter(uint8_t lineNr, uint8_t& capture, P087_Filter
 {
   uint8_t varNr = lineNr * 3 + P087_FIRST_FILTER_POS;
 
-  if ((varNr + 3) > P87_Nlines) { return ""; }
+  if ((varNr + 3) > P087_NR_FILTERS_N) { return ""; }
 
   capture    = _lines[varNr++].toInt();
   comparator = _lines[varNr++] == "1" ? P087_Filter_Comp::NotEqual : P087_Filter_Comp::Equal;

@@ -9,19 +9,19 @@
 #include <Regexp.h>
 
 
-# define P087_HEX_DATA_LEN_POS   0
-# define P087_HEX_HEADER_POS     1
-# define P087_HEX_DATA_LEN_ADD_POS  2
+# define P087_REGEX_POS          0
+# define P087_NR_CHAR_USE_POS    1
+# define P087_FILTER_OFF_WINDOW_POS 2
+# define P087_MATCH_TYPE_POS 3
 
-# define P087_REGEX_POS          3
-# define P087_NR_CHAR_USE_POS    4
-# define P087_FILTER_OFF_WINDOW_POS 5
-# define P087_MATCH_TYPE_POS 6
-
-# define P087_FIRST_FILTER_POS   9
+# define P087_FIRST_FILTER_POS   6
 
 # define P087_NR_FILTERS         10
-# define P87_Nlines              (P087_FIRST_FILTER_POS + 3 * (P087_NR_FILTERS))
+# define P087_NR_FILTERS_N       (P087_FIRST_FILTER_POS + 3 * (P087_NR_FILTERS))
+# define P087_HEX_DATA_LEN_POS   (P087_FIRST_FILTER_POS + 3 * (P087_NR_FILTERS) + 1)
+# define P087_HEX_HEADER_POS     (P087_FIRST_FILTER_POS + 3 * (P087_NR_FILTERS) + 2)
+# define P087_HEX_DATA_LEN_ADD_POS (P087_FIRST_FILTER_POS + 3 * (P087_NR_FILTERS) + 3)
+# define P87_Nlines              (P087_FIRST_FILTER_POS + 3 * (P087_NR_FILTERS) + 4)
 # define P87_Nchars              128
 # define P87_MAX_CAPTURE_INDEX   32
 
@@ -129,10 +129,10 @@ private:
 
   ESPeasySerial *easySerial = nullptr;
   String         sentence_part;
-  uint16_t       sentence_part_length;
+  uint16_t       sentence_part_length = 0;
   String         last_sentence;
-  char           head_sentence[33];
-  uint16_t       head_sentence_length;
+  char           head_sentence[33] = {0};
+  uint16_t       head_sentence_length = 0;
   uint16_t       max_length               = 550;
   uint32_t       sentences_received       = 0;
   uint32_t       sentences_received_error = 0;

@@ -373,7 +373,7 @@ void P087_html_show_matchForms(struct EventStruct *event) {
     P087_Filter_Comp comparator = P087_Filter_Comp::Equal;
     String filter;
 
-    for (uint8_t varNr = P087_FIRST_FILTER_POS; varNr < P87_Nlines; ++varNr)
+    for (uint8_t varNr = P087_FIRST_FILTER_POS; varNr < P087_NR_FILTERS_N; ++varNr)
     {
       String id = getPluginCustomArgName(varNr);
 
